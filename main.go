@@ -26,4 +26,5 @@ func main() {
 		strPtr := (fileIterator.Next(ctx)).(*string)
 		fmt.Println(*strPtr)
 	}
+	fileIterator.Close()
 }
