@@ -13,18 +13,10 @@ func main() {
 	// and then process it as needed. The file iterator implementation can be borrowed from
 	// the last assembler project that we did.
 	f, _ := os.Open("/Users/anujvarma/code/nand2tetris/projects/07/VMAbstraction.txt")
-	fileIterator := fileiterator.New(f)
+	fi := fileiterator.New(f)
 	ctx := context.Background()
-
-	for fileIterator.HasNext() {
-		(fileIterator.Next(ctx))
-		//fmt.Println(*strPtr)
+	for fi.HasNext() {
+		s := fi.Next(ctx).(*string)
+		fmt.Println(*s)
 	}
-
-	fileIterator.Reset()
-	for fileIterator.HasNext() {
-		strPtr := (fileIterator.Next(ctx)).(*string)
-		fmt.Println(*strPtr)
-	}
-	fileIterator.Close()
 }
