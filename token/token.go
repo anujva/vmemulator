@@ -12,7 +12,16 @@ type Token int
 const (
 	PUSH Token = iota
 	POP
-	SP
+	ARITHMETIC
+)
+
+// Segment defines the memory segment which is the
+// entry following PUSH/POP command
+type Segment int
+
+// Enum for memory segments
+const (
+	SP Segment = iota
 	LCL
 	ARG
 	THIS
