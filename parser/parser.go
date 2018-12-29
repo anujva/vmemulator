@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"errors"
 	"go/token"
 	"os"
 	"regexp"
@@ -32,10 +33,35 @@ func (p *Parser) HasMoreCommands() bool {
 // Parse the string given to the parser, return the tokens
 // for interpretation to assembly, it might also return a
 // nil slice
-func (p *Parser) Parse(s string) []token.Token {
+func (p *Parser) Parse(s string) (*token.Command, error) {
 	s = removeComments(s)
 	s = removeWhiteSpaces(s)
-	return nil
+	// split the command, and generate the tokens
+	sp := strings.Split(s, " ")
+	return convertToTokens(sp)
+}
+
+func convertToTokens(sp []string) (*token.Command, error) {
+	//
+	if val, ok := token.TokenMap[sp[0]]; !ok {
+		return nil, errors.New("unidentified command")
+	}
+	switch val {
+	case token.ARITHMETIC:
+		return &token.Command{
+			T:    val,
+			arg1: sp[0],
+		}
+	case token.PUSH || token.POP:
+		return &token.Command{
+			T:    val,
+			arg1: sp[1],
+			arg2: sp[2],
+		}
+	default:
+		return nil, errors.New("could not decode token")
+
+	}
 }
 
 // this function removes the comments from the string
