@@ -1,7 +1,5 @@
 package token
 
-import "go/token"
-
 // These are the defined tokens for the vm language
 // That will need to be tranlated based on what the
 // actual values of these segments are going to be
@@ -33,7 +31,7 @@ const (
 	POINTER
 )
 
-//TokenMap holds all possible keyword to token mapping
+// TokenMap holds all possible keyword to token mapping
 var TokenMap = map[string]Token{
 	"add":  ARITHMETIC,
 	"sub":  ARITHMETIC,
@@ -48,7 +46,7 @@ var TokenMap = map[string]Token{
 	"pop":  POP,
 }
 
-//SegmentMap holds all possible keyword to segment mapping
+// SegmentMap holds all possible keyword to segment mapping
 var SegmentMap = map[string]Segment{
 	"local":    LCL,
 	"argument": ARG,
@@ -62,7 +60,7 @@ var SegmentMap = map[string]Segment{
 
 // Command covers all vm commands
 type Command struct {
-	T    token.Token
-	arg1 string
-	arg2 string
+	T    Token
+	Arg1 string
+	Arg2 string
 }

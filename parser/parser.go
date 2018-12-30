@@ -1,14 +1,16 @@
 package parser
 
 import (
+	"context"
 	"errors"
-	"go/token"
+	"fmt"
 	"os"
 	"regexp"
 	"strings"
 
 	"github.com/anujva/iterator"
 	"github.com/anujva/iterator/fileiterator"
+	"github.com/anujva/vmemulator/token"
 )
 
 // Parser for vm code
@@ -33,34 +35,48 @@ func (p *Parser) HasMoreCommands() bool {
 // Parse the string given to the parser, return the tokens
 // for interpretation to assembly, it might also return a
 // nil slice
-func (p *Parser) Parse(s string) (*token.Command, error) {
-	s = removeComments(s)
-	s = removeWhiteSpaces(s)
+func (p *Parser) Parse(ctx context.Context) (*token.Command, error) {
+	s := p.fiter.Next(ctx).(*string)
+	fmt.Println("Debugging: ", *s)
+	str := removeComments(*s)
+	str = removeWhiteSpaces(str)
 	// split the command, and generate the tokens
-	sp := strings.Split(s, " ")
+	if str == "" {
+		return nil, nil
+	}
+	sp := strings.Split(str, " ")
 	return convertToTokens(sp)
 }
 
 func convertToTokens(sp []string) (*token.Command, error) {
-	//
-	if val, ok := token.TokenMap[sp[0]]; !ok {
+	// this will try to convert the string to command
+	var val token.Token
+	var ok bool
+	fmt.Println("Debugging: ", sp[0])
+	if val, ok = token.TokenMap[sp[0]]; !ok {
 		return nil, errors.New("unidentified command")
 	}
+
 	switch val {
 	case token.ARITHMETIC:
 		return &token.Command{
 			T:    val,
-			arg1: sp[0],
-		}
-	case token.PUSH || token.POP:
+			Arg1: sp[0],
+		}, nil
+	case token.PUSH:
 		return &token.Command{
 			T:    val,
-			arg1: sp[1],
-			arg2: sp[2],
-		}
+			Arg1: sp[1],
+			Arg2: sp[2],
+		}, nil
+	case token.POP:
+		return &token.Command{
+			T:    val,
+			Arg1: sp[1],
+			Arg2: sp[2],
+		}, nil
 	default:
 		return nil, errors.New("could not decode token")
-
 	}
 }
 
