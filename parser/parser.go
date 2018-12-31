@@ -3,7 +3,6 @@ package parser
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 	"regexp"
 	"strings"
@@ -37,7 +36,6 @@ func (p *Parser) HasMoreCommands() bool {
 // nil slice
 func (p *Parser) Parse(ctx context.Context) (*token.Command, error) {
 	s := p.fiter.Next(ctx).(*string)
-	fmt.Println("Debugging: ", *s)
 	str := removeComments(*s)
 	str = removeWhiteSpaces(str)
 	// split the command, and generate the tokens
@@ -52,7 +50,6 @@ func convertToTokens(sp []string) (*token.Command, error) {
 	// this will try to convert the string to command
 	var val token.Token
 	var ok bool
-	fmt.Println("Debugging: ", sp[0])
 	if val, ok = token.TokenMap[sp[0]]; !ok {
 		return nil, errors.New("unidentified command")
 	}
@@ -88,7 +85,7 @@ func removeComments(s string) string {
 	if i != -1 {
 		return s[:i]
 	}
-	return ""
+	return s
 }
 
 // removeWhiteSpaces should remove all whitespace that is extraneous in the string,
