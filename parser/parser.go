@@ -43,10 +43,10 @@ func (p *Parser) Parse(ctx context.Context) (*token.Command, error) {
 		return nil, nil
 	}
 	sp := strings.Split(str, " ")
-	return convertToTokens(sp)
+	return convertToTokens(sp, str)
 }
 
-func convertToTokens(sp []string) (*token.Command, error) {
+func convertToTokens(sp []string, str string) (*token.Command, error) {
 	// this will try to convert the string to command
 	var val token.Token
 	var ok bool
@@ -59,18 +59,21 @@ func convertToTokens(sp []string) (*token.Command, error) {
 		return &token.Command{
 			T:    val,
 			Arg1: sp[0],
+			str:  str,
 		}, nil
 	case token.PUSH:
 		return &token.Command{
 			T:    val,
 			Arg1: sp[1],
 			Arg2: sp[2],
+			str:  str,
 		}, nil
 	case token.POP:
 		return &token.Command{
 			T:    val,
 			Arg1: sp[1],
 			Arg2: sp[2],
+			str:  str,
 		}, nil
 	default:
 		return nil, errors.New("could not decode token")

@@ -15,16 +15,20 @@ func (cw *CodeWriter) GenerateAssembly(command token.Command) string {
 	switch command.T {
 	case token.ARITHMETIC:
 		return fmt.Sprintf(arithmeticTemplate)
+	case token.POP:
+		return fmt.Sprintf(popTemplate)
+	case token.PUSH:
+		return fmt.Sprintf(pushTemplate)
 	}
 }
 
+var pushTemplate = `
+
+`
+
+var popTemplate = `
+
+`
 var arithmeticTemplate = `
-%s
-@%s
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
+
 `
