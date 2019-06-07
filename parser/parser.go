@@ -59,21 +59,21 @@ func convertToTokens(sp []string, str string) (*token.Command, error) {
 		return &token.Command{
 			T:    val,
 			Arg1: sp[0],
-			str:  str,
+			S:    str,
 		}, nil
 	case token.PUSH:
 		return &token.Command{
 			T:    val,
 			Arg1: sp[1],
 			Arg2: sp[2],
-			str:  str,
+			S:    str,
 		}, nil
 	case token.POP:
 		return &token.Command{
 			T:    val,
 			Arg1: sp[1],
 			Arg2: sp[2],
-			str:  str,
+			S:    str,
 		}, nil
 	default:
 		return nil, errors.New("could not decode token")

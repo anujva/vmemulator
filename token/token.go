@@ -63,5 +63,5 @@ type Command struct {
 	T    Token
 	Arg1 string
 	Arg2 string
-	s    string
+	S    string
 }
